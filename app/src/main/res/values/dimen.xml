@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="ag_90">90</dimen>
+    <dimen name="dp_120">120dp</dimen>
+    <dimen name="dp_180">180dp</dimen>
+    <dimen name="dp_30">30dp</dimen>
+</resources>
