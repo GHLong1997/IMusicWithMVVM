@@ -6,4 +6,6 @@
     <color name="color_orange">#f7770f</color>
     <color name="color_white_orange">#ead4bd</color>
     <color name="color_white">#fff</color>
+    <color name="color_grayish">#EEEEEE</color>
+    <color name="color_gray_tab">#616161</color>
 </resources>

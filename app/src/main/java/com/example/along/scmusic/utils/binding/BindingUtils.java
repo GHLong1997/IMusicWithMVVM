@@ -4,10 +4,6 @@ import android.databinding.BindingAdapter;
 import android.view.View;
 import android.view.animation.AnimationSet;
 
-/**
- * Created by Long .
- */
-
 public final class BindingUtils {
 
     private BindingUtils() {
