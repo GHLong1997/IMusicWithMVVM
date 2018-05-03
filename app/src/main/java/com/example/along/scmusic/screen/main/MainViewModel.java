@@ -4,6 +4,8 @@ import com.example.along.scmusic.screen.BaseViewModel;
 
 public class MainViewModel extends BaseViewModel {
 
+    public static final int OFF_SCREEN_PAGE_LIMIT = 2;
+
     private MainAdapter mAdapter;
 
     public MainViewModel(MainAdapter adapter) {
