@@ -15,6 +15,7 @@ public class HomeViewModel extends BaseViewModel implements HomeAdapter.OnItemCl
     private HomeAdapter mAmbientAdapter;
     private HomeAdapter mClassicalAdapter;
     private HomeAdapter mCountryAdapter;
+    private SliderAdapter mSliderAdapter;
 
     public HomeViewModel(TrackRepository trackRepository, Navigator navigator,
             SchedulerProvider schedulerProvider) {
@@ -39,11 +40,12 @@ public class HomeViewModel extends BaseViewModel implements HomeAdapter.OnItemCl
     }
 
     public void setAdapter(HomeAdapter rockAdapter, HomeAdapter ambientAdapter,
-            HomeAdapter classicalAdapter, HomeAdapter countryAdapter) {
+            HomeAdapter classicalAdapter, HomeAdapter countryAdapter, SliderAdapter sliderAdapter) {
         mRockAdapter = rockAdapter;
         mAmbientAdapter = ambientAdapter;
         mClassicalAdapter = classicalAdapter;
         mCountryAdapter = countryAdapter;
+        mSliderAdapter = sliderAdapter;
         mRockAdapter.setItemClickListener(this);
         mAmbientAdapter.setItemClickListener(this);
         mClassicalAdapter.setItemClickListener(this);
@@ -64,5 +66,9 @@ public class HomeViewModel extends BaseViewModel implements HomeAdapter.OnItemCl
 
     public HomeAdapter getCountryAdapter() {
         return mCountryAdapter;
+    }
+
+    public SliderAdapter getSliderAdapter() {
+        return mSliderAdapter;
     }
 }
