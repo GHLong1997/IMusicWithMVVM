@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SCMusic</string>
+    <string name="alternative_rock">AlternativeRock</string>
+    <string name="ambient">Ambient</string>
+    <string name="classical">Classical</string>
+    <string name="country">Country</string>
 </resources>
