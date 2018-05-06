@@ -6,6 +6,7 @@ public final class Constant {
 
     public static final String BASE_URL = "http://api.soundcloud.com/";
     public static final String CLIENT_ID = "client_id=" + BuildConfig.API_KEY;
+    public static final int LIMIT_10 = 10;
 
     private Constant() {
     }

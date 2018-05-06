@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             >
             <android.support.v4.view.ViewPager
-                android:id="@+id/viewpagerSlider"
+                android:id="@+id/viewPagerSlider"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/dp_160"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -29,9 +29,11 @@
                 android:id="@+id/indicator"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_48"
-                app:layout_constraintBottom_toBottomOf="@id/viewpagerSlider"
+                app:layout_constraintBottom_toBottomOf="@id/viewPagerSlider"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
+                app:viewPager="@{viewPagerSlider}"
+                app:adapterChanged="@{viewModel.mIsAdapterChanged}"
                 />
             <View
                 android:id="@+id/viewRock"
@@ -41,7 +43,7 @@
                 android:background="@color/colorAccent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/titleRock"
-                app:layout_constraintTop_toBottomOf="@id/viewpagerSlider"
+                app:layout_constraintTop_toBottomOf="@id/viewPagerSlider"
                 />
             <TextView
                 android:id="@+id/titleRock"
@@ -55,7 +57,20 @@
                 android:textSize="@dimen/sp_17"
                 android:textStyle="bold"
                 app:layout_constraintLeft_toRightOf="@id/viewRock"
-                app:layout_constraintTop_toBottomOf="@id/viewpagerSlider"
+                app:layout_constraintTop_toBottomOf="@id/viewPagerSlider"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/action_see_all"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/sp_17"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginEnd="@dimen/dp_5"
+                android:layout_marginRight="@dimen/dp_5"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/viewPagerSlider"
                 />
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerRock"
@@ -103,6 +118,19 @@
                 app:layout_constraintLeft_toRightOf="@id/viewAmbient"
                 app:layout_constraintTop_toBottomOf="@id/oneLine"
                 />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/action_see_all"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/sp_17"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginEnd="@dimen/dp_5"
+                android:layout_marginRight="@dimen/dp_5"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/oneLine"
+                />
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerAmbient"
                 android:layout_width="match_parent"
@@ -115,6 +143,19 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/viewAmbient"
                 app:recyclerAdapter="@{viewModel.ambientAdapter}"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/action_see_all"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/sp_17"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginEnd="@dimen/dp_5"
+                android:layout_marginRight="@dimen/dp_5"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/viewPagerSlider"
                 />
             <View
                 android:id="@+id/secondLine"
@@ -147,6 +188,19 @@
                 android:textSize="@dimen/sp_17"
                 android:textStyle="bold"
                 app:layout_constraintLeft_toRightOf="@id/viewClassical"
+                app:layout_constraintTop_toBottomOf="@id/secondLine"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/action_see_all"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/sp_17"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginEnd="@dimen/dp_5"
+                android:layout_marginRight="@dimen/dp_5"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/secondLine"
                 />
             <android.support.v7.widget.RecyclerView
@@ -193,6 +247,19 @@
                 android:textSize="@dimen/sp_17"
                 android:textStyle="bold"
                 app:layout_constraintLeft_toRightOf="@id/viewCountry"
+                app:layout_constraintTop_toBottomOf="@id/thirdLine"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/action_see_all"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/sp_17"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginEnd="@dimen/dp_5"
+                android:layout_marginRight="@dimen/dp_5"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/thirdLine"
                 />
             <android.support.v7.widget.RecyclerView
