@@ -1,8 +1,11 @@
 package com.example.along.scmusic.data.source.remote;
 
 import com.example.along.scmusic.data.TrackDataSource;
+import com.example.along.scmusic.data.model.Track;
 import com.example.along.scmusic.data.source.remote.config.service.ServiceGenerator;
 import com.example.along.scmusic.data.source.remote.config.service.TrackApi;
+import io.reactivex.Single;
+import java.util.List;
 
 public class TrackRemoteDataSource implements TrackDataSource.RemoteDataSource {
 
@@ -19,5 +22,15 @@ public class TrackRemoteDataSource implements TrackDataSource.RemoteDataSource {
                     new TrackRemoteDataSource(ServiceGenerator.createService(TrackApi.class));
         }
         return sTrackRemoteDataSource;
+    }
+
+    @Override
+    public Single<List<Track>> getTrendingTracks(String kind, int limit, String order) {
+        return mApiTrack.getTrendingTracks(kind, limit, order);
+    }
+
+    @Override
+    public Single<List<Track>> getTracksByGenre(int limit, String genre, int offset) {
+        return mApiTrack.getTrackListByGenres(limit, genre, offset);
     }
 }
