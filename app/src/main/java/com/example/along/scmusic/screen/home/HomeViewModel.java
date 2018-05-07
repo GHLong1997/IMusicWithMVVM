@@ -2,10 +2,13 @@ package com.example.along.scmusic.screen.home;
 
 import android.content.Context;
 import android.databinding.ObservableField;
+import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 import com.example.along.scmusic.data.model.Track;
 import com.example.along.scmusic.data.repository.TrackRepository;
 import com.example.along.scmusic.screen.BaseViewModel;
+import com.example.along.scmusic.screen.seemore.SeeMoreMusicActivity;
 import com.example.along.scmusic.utils.Constant;
 import com.example.along.scmusic.utils.common.Genres;
 import com.example.along.scmusic.utils.navigator.Navigator;
@@ -30,6 +33,10 @@ public class HomeViewModel extends BaseViewModel implements HomeAdapter.OnItemCl
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
     private Context mContext;
     public ObservableField<Boolean> mIsAdapterChanged = new ObservableField<>();
+    public String mRock = Genres.ALTERNATIVEROCK;
+    public String mAmbient = Genres.AMBIENT;
+    public String mClassical = Genres.CLASSICAL;
+    public String mCountry = Genres.COUNTRY;
 
     public HomeViewModel(Context context, TrackRepository trackRepository, Navigator navigator,
             SchedulerProvider schedulerProvider) {
@@ -89,10 +96,10 @@ public class HomeViewModel extends BaseViewModel implements HomeAdapter.OnItemCl
 
     public void loadData() {
         getTrendingTracks();
-        getTracksByGenre(Genres.ALTERNATIVEROCK, mRockAdapter);
-        getTracksByGenre(Genres.AMBIENT, mAmbientAdapter);
-        getTracksByGenre(Genres.CLASSICAL, mClassicalAdapter);
-        getTracksByGenre(Genres.COUNTRY, mCountryAdapter);
+        getTracksByGenre(mRock, mRockAdapter);
+        getTracksByGenre(mAmbient, mAmbientAdapter);
+        getTracksByGenre(mClassical, mClassicalAdapter);
+        getTracksByGenre(mCountry, mCountryAdapter);
     }
 
     private void getTrendingTracks() {
@@ -120,5 +127,11 @@ public class HomeViewModel extends BaseViewModel implements HomeAdapter.OnItemCl
                                         throwable.getLocalizedMessage(), Toast.LENGTH_SHORT)
                                         .show());
         mCompositeDisposable.add(disposable);
+    }
+
+    public void goToMoreActivity(View view, String genre) {
+        Bundle bundle = new Bundle();
+        bundle.putString(Constant.GENRE, genre);
+        mNavigator.startActivity(SeeMoreMusicActivity.class, bundle);
     }
 }

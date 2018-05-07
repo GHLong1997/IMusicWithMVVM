@@ -29,11 +29,11 @@
                 android:id="@+id/indicator"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_48"
+                app:adapterChanged="@{viewModel.mIsAdapterChanged}"
                 app:layout_constraintBottom_toBottomOf="@id/viewPagerSlider"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:viewPager="@{viewPagerSlider}"
-                app:adapterChanged="@{viewModel.mIsAdapterChanged}"
                 />
             <View
                 android:id="@+id/viewRock"
@@ -62,13 +62,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp_5"
+                android:layout_marginRight="@dimen/dp_5"
+                android:layout_marginTop="@dimen/dp_10"
+                android:onClick="@{(v) -> viewModel.goToMoreActivity(v, viewModel.mRock)}"
                 android:text="@string/action_see_all"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/sp_17"
                 android:textStyle="bold"
-                android:layout_marginTop="@dimen/dp_10"
-                android:layout_marginEnd="@dimen/dp_5"
-                android:layout_marginRight="@dimen/dp_5"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/viewPagerSlider"
                 />
@@ -121,13 +122,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp_5"
+                android:layout_marginRight="@dimen/dp_5"
+                android:layout_marginTop="@dimen/dp_10"
+                android:onClick="@{(v) -> viewModel.goToMoreActivity(v, viewModel.mAmbient)}"
                 android:text="@string/action_see_all"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/sp_17"
                 android:textStyle="bold"
-                android:layout_marginTop="@dimen/dp_10"
-                android:layout_marginEnd="@dimen/dp_5"
-                android:layout_marginRight="@dimen/dp_5"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/oneLine"
                 />
@@ -144,19 +146,7 @@
                 app:layout_constraintTop_toBottomOf="@id/viewAmbient"
                 app:recyclerAdapter="@{viewModel.ambientAdapter}"
                 />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/action_see_all"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/sp_17"
-                android:textStyle="bold"
-                android:layout_marginTop="@dimen/dp_10"
-                android:layout_marginEnd="@dimen/dp_5"
-                android:layout_marginRight="@dimen/dp_5"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/viewPagerSlider"
-                />
+
             <View
                 android:id="@+id/secondLine"
                 android:layout_width="match_parent"
@@ -193,13 +183,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp_5"
+                android:layout_marginRight="@dimen/dp_5"
+                android:layout_marginTop="@dimen/dp_10"
+                android:onClick="@{(v) -> viewModel.goToMoreActivity(v, viewModel.mClassical)}"
                 android:text="@string/action_see_all"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/sp_17"
                 android:textStyle="bold"
-                android:layout_marginTop="@dimen/dp_10"
-                android:layout_marginEnd="@dimen/dp_5"
-                android:layout_marginRight="@dimen/dp_5"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/secondLine"
                 />
@@ -252,13 +243,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp_5"
+                android:layout_marginRight="@dimen/dp_5"
+                android:layout_marginTop="@dimen/dp_10"
+                android:onClick="@{(v) -> viewModel.goToMoreActivity(v, viewModel.mCountry)}"
                 android:text="@string/action_see_all"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/sp_17"
                 android:textStyle="bold"
-                android:layout_marginTop="@dimen/dp_10"
-                android:layout_marginEnd="@dimen/dp_5"
-                android:layout_marginRight="@dimen/dp_5"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/thirdLine"
                 />
