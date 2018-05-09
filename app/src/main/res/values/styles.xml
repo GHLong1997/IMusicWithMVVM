@@ -3,5 +3,6 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorAccent</item>
         <item name="colorAccent">@color/color_white</item>
+        <item name="colorControlNormal">@color/color_white</item>
     </style>
 </resources>
