@@ -30,7 +30,8 @@ public class SeeMoreMusicAdapter extends BaseRecyclerViewAdapter<SeeMoreMusicAda
 
     @NonNull
     @Override
-    public SeeMoreMusicAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SeeMoreMusicAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
+            int viewType) {
         LayoutItemSeeMoreMusicBinding binding =
                 DataBindingUtil.inflate(LayoutInflater.from(getContext()),
                         R.layout.layout_item_see_more_music, parent, false);
@@ -77,12 +78,13 @@ public class SeeMoreMusicAdapter extends BaseRecyclerViewAdapter<SeeMoreMusicAda
         }
 
         void bind(Track track, int position) {
-            mBinding.setViewModel(new ItemSeeMoreMusicViewModel(track, position, mItemClickListener));
+            mBinding.setViewModel(
+                    new ItemSeeMoreMusicViewModel(track, position, mItemClickListener));
             mBinding.executePendingBindings();
         }
     }
 
     public interface OnItemClickListener {
-        void onItemClicked(Track track, int position);
+        void onItemClicked(int position);
     }
 }

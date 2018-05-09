@@ -32,7 +32,7 @@ public class HomeAdapter extends BaseRecyclerViewAdapter<HomeAdapter.ViewHolder>
 
     @Override
     public void onBindViewHolder(@NonNull HomeAdapter.ViewHolder holder, int position) {
-        holder.bind(mTracks.get(position), position);
+        holder.bind(mTracks.get(position), mTracks, position);
     }
 
     @Override
@@ -43,10 +43,6 @@ public class HomeAdapter extends BaseRecyclerViewAdapter<HomeAdapter.ViewHolder>
     public void addData(@NonNull List<Track> trackList) {
         mTracks.addAll(trackList);
         notifyDataSetChanged();
-    }
-
-    public List<Track> getData() {
-        return mTracks;
     }
 
     public void setItemClickListener(OnItemClickListener itemClickListener) {
@@ -63,13 +59,14 @@ public class HomeAdapter extends BaseRecyclerViewAdapter<HomeAdapter.ViewHolder>
             mItemClickListener = itemClickListener;
         }
 
-        void bind(@NonNull Track track, int position) {
-            mBinding.setViewModel(new ItemHomeViewModel(track, position, mItemClickListener));
+        void bind(@NonNull Track track, List<Track> tracks, int position) {
+            mBinding.setViewModel(
+                    new ItemHomeViewModel(track, tracks, position, mItemClickListener));
             mBinding.executePendingBindings();
         }
     }
 
     public interface OnItemClickListener {
-        void onItemClicked(Track track, int position);
+        void onItemClicked(List<Track> tracks, int position);
     }
 }
