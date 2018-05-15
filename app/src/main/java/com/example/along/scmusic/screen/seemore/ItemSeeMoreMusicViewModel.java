@@ -19,6 +19,9 @@ public class ItemSeeMoreMusicViewModel {
     }
 
     public void onItemClicked(View view) {
-        //TODO edit later
+        if (mItemClickListener == null || mTrackObservableField.get() == null) {
+            return;
+        }
+        mItemClickListener.onItemClicked(mPosition);
     }
 }

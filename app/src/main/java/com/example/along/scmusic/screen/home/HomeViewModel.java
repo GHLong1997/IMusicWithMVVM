@@ -5,9 +5,12 @@ import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
+import com.example.along.scmusic.R;
 import com.example.along.scmusic.data.model.Track;
 import com.example.along.scmusic.data.repository.TrackRepository;
 import com.example.along.scmusic.screen.BaseViewModel;
+import com.example.along.scmusic.screen.OnOpenFragmentListener;
+import com.example.along.scmusic.screen.playmusic.PlayMusicFragment;
 import com.example.along.scmusic.screen.seemore.SeeMoreMusicActivity;
 import com.example.along.scmusic.utils.Constant;
 import com.example.along.scmusic.utils.common.Genres;
@@ -15,13 +18,18 @@ import com.example.along.scmusic.utils.navigator.Navigator;
 import com.example.along.scmusic.utils.rx.SchedulerProvider;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HomeViewModel extends BaseViewModel implements HomeAdapter.OnItemClickListener {
 
     private static final String KIND = "Trending";
-    private static final int LIMIT_5 = 5;
     private static final String ORDER_BY = "created_at";
-    private static final int OFFSET_0 = 0;
+    private static final int LIMIT_FIVE = 5;
+    private static final int OFFSET = 0;
+    private static final int VALUES_OFFSET_AFTER_REQUEST_DATA_ONCE = 10;
+
+    private Context mContext;
     private TrackRepository mTrackRepository;
     private Navigator mNavigator;
     private SchedulerProvider mSchedulerProvider;
@@ -30,8 +38,9 @@ public class HomeViewModel extends BaseViewModel implements HomeAdapter.OnItemCl
     private HomeAdapter mClassicalAdapter;
     private HomeAdapter mCountryAdapter;
     private SliderAdapter mSliderAdapter;
+    private List<Track> mTracks = new ArrayList<>();
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
-    private Context mContext;
+    private OnOpenFragmentListener mFragmentListener;
     public ObservableField<Boolean> mIsAdapterChanged = new ObservableField<>();
     public String mRock = Genres.ALTERNATIVEROCK;
     public String mAmbient = Genres.AMBIENT;
@@ -39,11 +48,12 @@ public class HomeViewModel extends BaseViewModel implements HomeAdapter.OnItemCl
     public String mCountry = Genres.COUNTRY;
 
     public HomeViewModel(Context context, TrackRepository trackRepository, Navigator navigator,
-            SchedulerProvider schedulerProvider) {
+            SchedulerProvider schedulerProvider, OnOpenFragmentListener fragmentListener) {
         mContext = context.getApplicationContext();
         mTrackRepository = trackRepository;
         mNavigator = navigator;
         mSchedulerProvider = schedulerProvider;
+        mFragmentListener = fragmentListener;
     }
 
     @Override
@@ -57,8 +67,10 @@ public class HomeViewModel extends BaseViewModel implements HomeAdapter.OnItemCl
     }
 
     @Override
-    public void onItemClicked(Track track, int position) {
-        //TODO edit later
+    public void onItemClicked(List<Track> tracks, int position) {
+        mFragmentListener.onNewFragment(R.id.constraintLayoutMain,
+                PlayMusicFragment.class.getSimpleName(), tracks, position,
+                VALUES_OFFSET_AFTER_REQUEST_DATA_ONCE);
     }
 
     public void setAdapter(HomeAdapter rockAdapter, HomeAdapter ambientAdapter,
@@ -103,7 +115,7 @@ public class HomeViewModel extends BaseViewModel implements HomeAdapter.OnItemCl
     }
 
     private void getTrendingTracks() {
-        Disposable disposable = mTrackRepository.getTrendingTracks(KIND, LIMIT_5, ORDER_BY)
+        Disposable disposable = mTrackRepository.getTrendingTracks(KIND, LIMIT_FIVE, ORDER_BY)
                 .flattenAsObservable(trackList -> trackList)
                 .map(track -> SliderFragment.newInstance(track))
                 .toList()
@@ -119,7 +131,7 @@ public class HomeViewModel extends BaseViewModel implements HomeAdapter.OnItemCl
 
     private void getTracksByGenre(@Genres String genres, HomeAdapter adapter) {
         Disposable disposable =
-                mTrackRepository.getTracksByGenre(Constant.LIMIT_10, genres, OFFSET_0)
+                mTrackRepository.getTracksByGenre(Constant.LIMIT_TEN, genres, OFFSET)
                         .subscribeOn(mSchedulerProvider.io())
                         .observeOn(mSchedulerProvider.ui())
                         .subscribe(trackList -> adapter.addData(trackList),
@@ -129,7 +141,7 @@ public class HomeViewModel extends BaseViewModel implements HomeAdapter.OnItemCl
         mCompositeDisposable.add(disposable);
     }
 
-    public void goToMoreActivity(View view, String genre) {
+    public void goToSeeMoreMusicActivity(View view, String genre) {
         Bundle bundle = new Bundle();
         bundle.putString(Constant.GENRE, genre);
         mNavigator.startActivity(SeeMoreMusicActivity.class, bundle);
