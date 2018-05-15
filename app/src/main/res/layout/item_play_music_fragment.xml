@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.along.scmusic.screen.playmusic.ItemPlayMusicViewModel"
+            />
+    </data>
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_10"
+        android:background="@android:color/black"
+        android:onClick="@{viewModel::onItemClicked}"
+        >
+        <TextView
+            android:id="@+id/textTrackTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.mTrackObservableField.title}"
+            android:textColor="@{viewModel.mIsSelected ? @color/colorAccent : @color/color_white}"
+            android:textSize="@dimen/sp_15"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+        <TextView
+            android:id="@+id/textArtistName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.mTrackObservableField.user.username}"
+            android:textColor="@{viewModel.mIsSelected ? @color/colorAccent : @color/color_white}"
+            android:textSize="@dimen/sp_13"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textTrackTitle"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_0.6"
+            android:layout_marginTop="@dimen/dp_5"
+            android:background="@color/color_gray"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textArtistName"
+            />
+    </android.support.constraint.ConstraintLayout>
+</layout>
