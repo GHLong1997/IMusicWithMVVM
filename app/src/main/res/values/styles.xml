@@ -5,4 +5,9 @@
         <item name="colorAccent">@color/color_white</item>
         <item name="colorControlNormal">@color/color_white</item>
     </style>
+
+    <style name="colorProgress">
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
 </resources>
