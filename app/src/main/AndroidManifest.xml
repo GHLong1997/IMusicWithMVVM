@@ -26,6 +26,9 @@
         <activity
             android:name=".screen.seemore.SeeMoreMusicActivity"
             android:screenOrientation="portrait"/>
+
+        <service android:name=".service.PlayMusicService"/>
+
     </application>
 
 </manifest>
