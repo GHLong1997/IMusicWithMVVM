@@ -58,6 +58,10 @@ public class PlayMusicAdapter extends BaseRecyclerViewAdapter<PlayMusicAdapter.V
         notifyDataSetChanged();
     }
 
+    public List<Track> getData() {
+        return mTracks;
+    }
+
     public int getOffset() {
         return mOffset;
     }

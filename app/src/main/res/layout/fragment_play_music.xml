@@ -25,6 +25,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            url="@{viewModel.mPlayMusicService.mTrackObservableField.artworkUrl}"
             />
         <TextView
             android:id="@+id/textTrackTitle"
@@ -39,6 +40,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/imageTrack"
+            android:text="@{viewModel.mPlayMusicService.mTrackObservableField.title}"
             />
         <TextView
             android:id="@+id/textArtistName"
@@ -46,6 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textColor="@color/color_gray"
+            android:text="@{viewModel.mPlayMusicService.mTrackObservableField.getUser().getUsername()}"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textTrackTitle"
@@ -55,6 +58,7 @@
             android:id="@+id/textCurrentPosition"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:text="@{viewModel.mMediaCurrentPosition}"
             android:gravity="end"
             android:textColor="@android:color/white"
             app:layout_constraintHorizontal_weight="1"
@@ -68,6 +72,9 @@
             android:layout_height="wrap_content"
             android:max="100"
             android:theme="@style/colorProgress"
+            android:onProgressChanged="@{viewModel.onProgressChanged}"
+            android:onStopTrackingTouch="@{viewModel.onStopTrackingTouch}"
+            android:progress="@{viewModel.mProgressCurrentTimeMusic}"
             app:layout_constraintHorizontal_weight="7"
             app:layout_constraintLeft_toRightOf="@id/textCurrentPosition"
             app:layout_constraintRight_toLeftOf="@id/textDuration"
@@ -78,6 +85,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:maxLines="1"
+            android:text="@{viewModel.mMediaTotalDuration}"
             android:textColor="@color/color_white"
             app:layout_constraintHorizontal_weight="1"
             app:layout_constraintLeft_toRightOf="@id/seekProgress"
@@ -94,7 +102,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/imagePrevious"
             app:layout_constraintTop_toBottomOf="@id/textCurrentPosition"
-            app:srcCompat="@drawable/ic_repeat"
+            app:srcCompat="@drawable/ic_non_repeat"
             tools:ignore="ContentDescription"
 
             />
@@ -109,6 +117,7 @@
             app:layout_constraintTop_toBottomOf="@id/textCurrentPosition"
             app:srcCompat="@drawable/ic_skip_previous"
             tools:ignore="ContentDescription"
+            android:onClick="@{viewModel::onPreTrack}"
             />
         <ImageButton
             android:id="@+id/imagePlay"
@@ -121,6 +130,8 @@
             app:layout_constraintRight_toLeftOf="@id/imageNext"
             app:layout_constraintTop_toBottomOf="@id/textCurrentPosition"
             tools:ignore="ContentDescription"
+            android:src="@{viewModel.mIsPlaying ? @drawable/ic_pause : @drawable/ic_play_arrow, default = @drawable/ic_play_arrow}"
+            android:onClick="@{viewModel::onPlayAndPauseTrack}"
             />
         <ImageButton
             android:id="@+id/imageNext"
@@ -133,6 +144,7 @@
             app:layout_constraintTop_toBottomOf="@id/textCurrentPosition"
             app:srcCompat="@drawable/ic_skip_next"
             tools:ignore="ContentDescription"
+            android:onClick="@{viewModel::onNextTrack}"
             />
         <ImageButton
             android:id="@+id/imageDownload"

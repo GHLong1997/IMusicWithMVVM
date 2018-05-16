@@ -54,18 +54,10 @@ public class SeeMoreMusicActivity extends AppCompatActivity implements OnOpenFra
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         transaction.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_in_down,
                 R.anim.slide_out_down, R.anim.slide_out_up);
-        PlayMusicFragment playMusicFragment =
-                (PlayMusicFragment) mFragmentManager.findFragmentByTag(tag);
-
-        if (playMusicFragment == null) {
-            playMusicFragment = PlayMusicFragment.newInstance(position, offset);
-            playMusicFragment.setData(tracks);
-            transaction.replace(containerViewId, playMusicFragment, tag)
-                    .addToBackStack(null)
-                    .commit();
-        } else {
-            transaction.show(playMusicFragment)
-                    .commit();
-        }
+        PlayMusicFragment playMusicFragment = PlayMusicFragment.newInstance(position, offset);
+        playMusicFragment.setData(tracks);
+        transaction.replace(containerViewId, playMusicFragment, tag)
+                .addToBackStack(null)
+                .commit();
     }
 }
