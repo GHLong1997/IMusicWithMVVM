@@ -33,4 +33,9 @@ public class TrackRemoteDataSource implements TrackDataSource.RemoteDataSource {
     public Single<List<Track>> getTracksByGenre(int limit, String genre, int offset) {
         return mApiTrack.getTrackListByGenres(limit, genre, offset);
     }
+
+    @Override
+    public Single<List<Track>> searchTracks(String query, int limit, int offset) {
+        return mApiTrack.searchTracks(query, limit, offset);
+    }
 }

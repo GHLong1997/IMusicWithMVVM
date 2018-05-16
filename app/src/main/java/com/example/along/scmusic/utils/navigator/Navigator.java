@@ -37,6 +37,18 @@ public class Navigator {
         startActivity(intent);
     }
 
+    public void startActivityForResult(@NonNull Intent intent, int requestCode) {
+        mActivity.startActivityForResult(intent, requestCode);
+        setActivityTransactionAnimation(ActivityTransition.START);
+    }
+
+    public void startActivityForResult(@NonNull Class<? extends Activity> clazz, Bundle args,
+            int requestCode) {
+        Intent intent = new Intent(mActivity, clazz);
+        intent.putExtras(args);
+        startActivityForResult(intent, requestCode);
+    }
+
     private void setFragmentTransactionAnimation(FragmentTransaction transaction,
             @NavigateAnim int animation) {
         switch (animation) {

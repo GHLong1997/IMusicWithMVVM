@@ -32,13 +32,17 @@ public final class BindingUtils {
     public static void loadImage(ImageView imageView, String url) {
         Glide.with(imageView.getContext())
                 .load(url)
-                .apply(new RequestOptions()
-                .placeholder(R.drawable.ic_logo))
+                .apply(new RequestOptions().placeholder(R.drawable.ic_logo))
                 .into(imageView);
     }
 
     @BindingAdapter("viewPagerAdapter")
     public static void setAdapterForViewPager(ViewPager viewPager, PagerAdapter adapter) {
         viewPager.setAdapter(adapter);
+    }
+
+    @BindingAdapter("android:visibility")
+    public static void setVisibility(View view, Boolean value) {
+        view.setVisibility(value ? View.VISIBLE : View.GONE);
     }
 }

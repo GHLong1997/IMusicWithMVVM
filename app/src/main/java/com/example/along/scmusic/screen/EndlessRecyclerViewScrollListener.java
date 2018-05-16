@@ -32,6 +32,14 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
             fistVisibleItemPosition =
                     ((LinearLayoutManager) mLayoutManager).findFirstVisibleItemPosition();
         }
+
+        if (totalItemCount < mPreviousTotal) {
+            mPreviousTotal = totalItemCount;
+            if (totalItemCount == 0) {
+                mIsLoading = true;
+            }
+        }
+
         if (mIsLoading && totalItemCount > mPreviousTotal) {
             mIsLoading = false;
             mPreviousTotal = totalItemCount;

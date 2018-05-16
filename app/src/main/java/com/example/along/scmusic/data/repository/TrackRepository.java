@@ -1,8 +1,11 @@
 package com.example.along.scmusic.data.repository;
 
+import android.content.Context;
+import android.database.Cursor;
 import com.example.along.scmusic.data.TrackDataSource;
 import com.example.along.scmusic.data.model.Track;
 import com.example.along.scmusic.data.source.local.TrackLocalDataSource;
+import io.reactivex.Flowable;
 import io.reactivex.Single;
 import java.util.List;
 
@@ -37,5 +40,13 @@ public class TrackRepository {
 
     public Single<List<Track>> getTracksByGenre(int limit, String genre, int offset) {
         return mTrackRemoteDataSource.getTracksByGenre(limit, genre, offset);
+    }
+
+    public Single<List<Track>> searchTracks(String query, int limit, int offset) {
+        return mTrackRemoteDataSource.searchTracks(query, limit, offset);
+    }
+
+    public Flowable<Cursor> getAllTracksFromLocal(Context context) {
+        return mTrackLocalDataSource.getAllTracksFromLocal(context);
     }
 }

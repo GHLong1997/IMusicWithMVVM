@@ -1,8 +1,10 @@
 package com.example.along.scmusic.screen.playmusic;
 
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.databinding.ObservableField;
 import android.os.Handler;
@@ -10,12 +12,16 @@ import android.os.IBinder;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Toast;
+import com.example.along.scmusic.R;
 import com.example.along.scmusic.data.model.Track;
 import com.example.along.scmusic.data.repository.TrackRepository;
 import com.example.along.scmusic.screen.BaseViewModel;
 import com.example.along.scmusic.screen.EndlessRecyclerViewScrollListener;
+import com.example.along.scmusic.screen.OnDataChangedListener;
+import com.example.along.scmusic.screen.main.MainActivity;
 import com.example.along.scmusic.service.PlayMusicService;
 import com.example.along.scmusic.utils.Constant;
 import com.example.along.scmusic.utils.common.Genres;
@@ -28,6 +34,7 @@ import java.util.List;
 public class PlayMusicViewModel extends BaseViewModel
         implements PlayMusicAdapter.OnItemClickListener {
 
+    private static final int PRIORITY_RECEIVE = 1;
     private static final int DEFAULT_POSITION = 0;
     private static final int TIME_DELAY = 100;
 
@@ -43,12 +50,15 @@ public class PlayMusicViewModel extends BaseViewModel
     private Handler mHandler = new Handler();
     private Utilities mUtilities = new Utilities();
     private ServiceConnection mServiceConnection;
+    private OnDataChangedListener<Track> mListener;
 
     public ObservableField<PlayMusicService> mPlayMusicService = new ObservableField<>();
     public ObservableField<String> mMediaTotalDuration = new ObservableField<>();
     public ObservableField<String> mMediaCurrentPosition = new ObservableField<>();
+    public ObservableField<String> mSetupMusic = new ObservableField<>("");
     public ObservableField<Integer> mProgress = new ObservableField<>();
     public ObservableField<Boolean> mIsPlaying = new ObservableField<>();
+    public ObservableField<Track> mTrackObservableField = new ObservableField<>();
 
     public PlayMusicViewModel(Context context, TrackRepository repository, Navigator navigator,
             SchedulerProvider schedulerProvider, PlayMusicAdapter adapter) {
@@ -63,7 +73,7 @@ public class PlayMusicViewModel extends BaseViewModel
 
     @Override
     protected void onStart() {
-        playService();
+
     }
 
     @Override
@@ -73,6 +83,7 @@ public class PlayMusicViewModel extends BaseViewModel
 
     @Override
     public void onItemClicked(int position) {
+        mListener.onDataChanged(mAdapter.getData().get(position));
         changeColorItem(position);
         mPlayMusicService.get().playTrack(position);
         mProgress.set(DEFAULT_POSITION);
@@ -85,6 +96,10 @@ public class PlayMusicViewModel extends BaseViewModel
 
     public void setTrackPosition(int position) {
         mTrackPosition = position;
+    }
+
+    public void setListener(OnDataChangedListener<Track> listener) {
+        mListener = listener;
     }
 
     public PlayMusicAdapter getAdapter() {
@@ -123,7 +138,7 @@ public class PlayMusicViewModel extends BaseViewModel
         mAdapter.notifyItemRangeChanged(DEFAULT_POSITION, mAdapter.getItemCount());
     }
 
-    private void playService() {
+    public void playService() {
         getService();
         Intent intent =
                 PlayMusicService.getTracksIntent(mContext, mAdapter.getData(), mTrackPosition);
@@ -140,6 +155,9 @@ public class PlayMusicViewModel extends BaseViewModel
                 PlayMusicService.LocalBinder binder = (PlayMusicService.LocalBinder) iBinder;
                 mPlayMusicService.set(binder.getService());
                 updateProgressBar();
+                mSetupMusic.set(mContext.getSharedPreferences(Constant.SETUP_MUSIC_PREFERENCES,
+                        Context.MODE_PRIVATE).getString(Constant.SETUP, Constant.NON_REPEAT));
+                mListener.onDataChanged(mPlayMusicService.get().mTrackObservableField.get());
             }
 
             @Override
@@ -165,10 +183,11 @@ public class PlayMusicViewModel extends BaseViewModel
             mIsPlaying.set(true);
             if (mMediaCurrentPosition.get().equals(mMediaTotalDuration.get())
                     && currentPosition != 0) {
-                mPlayMusicService.get().nextTrack();
+                mPlayMusicService.get().nextTrack(false);
                 mTrackPosition = mPlayMusicService.get().getTrackPosition();
                 mAdapter.addPosition(mTrackPosition);
                 mAdapter.notifyItemRangeChanged(Constant.DEFAULT_POSITION, mAdapter.getItemCount());
+                mListener.onDataChanged(mPlayMusicService.get().mTrackObservableField.get());
             }
             mHandler.postDelayed(this, TIME_DELAY);
         }
@@ -189,19 +208,21 @@ public class PlayMusicViewModel extends BaseViewModel
         updateProgressBar();
     }
 
-    public void onNextTrack(View view) {
-        mPlayMusicService.get().nextTrack();
+    public void onNextTrack() {
+        mPlayMusicService.get().nextTrack(true);
         changeColorItem(mPlayMusicService.get().getTrackPosition());
         updateProgressBar();
+        mListener.onDataChanged(mPlayMusicService.get().mTrackObservableField.get());
     }
 
-    public void onPreTrack(View view) {
+    public void onPreTrack() {
         mPlayMusicService.get().preTrack();
         changeColorItem(mPlayMusicService.get().getTrackPosition());
         updateProgressBar();
+        mListener.onDataChanged(mPlayMusicService.get().mTrackObservableField.get());
     }
 
-    public void onPlayImageButtonClicked(View view) {
+    public void onImagePlayMusicClicked(View view) {
         if (mPlayMusicService.get().isPlaying()) {
             mPlayMusicService.get().pauseMedia();
             mIsPlaying.set(false);
@@ -212,4 +233,60 @@ public class PlayMusicViewModel extends BaseViewModel
             updateProgressBar();
         }
     }
+
+    public void onImageSetupMusicClicked(View view) {
+        mPlayMusicService.get().setupMusic();
+        mSetupMusic.set(mPlayMusicService.get().getSetup());
+    }
+
+    public void refreshData(List<Track> tracks, int trackPosition, int offset) {
+
+        mGenre = tracks.get(trackPosition).getGenre();
+
+        mAdapter.refreshData(tracks, offset);
+        changeColorItem(trackPosition);
+
+        mPlayMusicService.get().stopMedia();
+        mPlayMusicService.get().refreshData(tracks, trackPosition);
+        mPlayMusicService.get().initMediaPlayer();
+        mListener.onDataChanged(mPlayMusicService.get().mTrackObservableField.get());
+        updateProgressBar();
+    }
+
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction() != null) {
+                switch (intent.getAction()) {
+                    case Constant.ACTION_NEXT:
+                        onNextTrack();
+                        break;
+                    case Constant.ACTION_PREVIOUS:
+                        onPreTrack();
+                        break;
+                    case Constant.ACTION_PLAY:
+                        mPlayMusicService.get().playMedia();
+                        mIsPlaying.set(true);
+                        updateProgressBar();
+                        break;
+                    case Constant.ACTION_PAUSE:
+                        mPlayMusicService.get().pauseMedia();
+                        mIsPlaying.set(false);
+                        mHandler.removeCallbacks(mUpdateTimeTask);
+                        break;
+                }
+            }
+        }
+    };
+
+    public void registerBroadcastReceiver() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Constant.ACTION_PAUSE);
+        intentFilter.addAction(Constant.ACTION_NEXT);
+        intentFilter.addAction(Constant.ACTION_PREVIOUS);
+        intentFilter.addAction(Constant.ACTION_PLAY);
+        intentFilter.setPriority(PRIORITY_RECEIVE);
+        mContext.registerReceiver(mBroadcastReceiver, intentFilter);
+    }
+
 }

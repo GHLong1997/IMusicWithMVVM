@@ -1,4 +1,4 @@
-package com.example.along.scmusic.screen.playmusic;
+package com.example.along.scmusic.screen.search;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
@@ -9,39 +9,32 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import com.example.along.scmusic.R;
 import com.example.along.scmusic.data.model.Track;
-import com.example.along.scmusic.databinding.ItemPlayMusicFragmentBinding;
+import com.example.along.scmusic.databinding.LayoutItemSearchBinding;
 import com.example.along.scmusic.screen.BaseRecyclerViewAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayMusicAdapter extends BaseRecyclerViewAdapter<PlayMusicAdapter.ViewHolder> {
+public class SearchAdapter extends BaseRecyclerViewAdapter<SearchAdapter.ViewHolder> {
 
-    private int mCurrentPosition;
     private int mOffset;
     private List<Track> mTracks = new ArrayList<>();
     private OnItemClickListener mItemClickListener;
 
-    PlayMusicAdapter(Context context) {
+    SearchAdapter(Context context) {
         super(context);
     }
 
     @NonNull
     @Override
-    public PlayMusicAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemPlayMusicFragmentBinding binding =
-                DataBindingUtil.inflate(LayoutInflater.from(getContext()),
-                        R.layout.item_play_music_fragment, parent, false);
+    public SearchAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutItemSearchBinding binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()),
+                R.layout.layout_item_search, parent, false);
         return new ViewHolder(binding, mItemClickListener);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PlayMusicAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SearchAdapter.ViewHolder holder, int position) {
         holder.bind(mTracks.get(position));
-        if (position == mCurrentPosition) {
-            holder.changeColor();
-        } else {
-            holder.resetColor();
-        }
     }
 
     @Override
@@ -58,12 +51,9 @@ public class PlayMusicAdapter extends BaseRecyclerViewAdapter<PlayMusicAdapter.V
         notifyDataSetChanged();
     }
 
-    public void refreshData(@NonNull List<Track> tracks, int offset) {
+    public void clearData() {
         mTracks.clear();
-        mTracks.addAll(tracks);
-        mOffset = tracks.size();
         notifyDataSetChanged();
-
     }
 
     public List<Track> getData() {
@@ -78,38 +68,24 @@ public class PlayMusicAdapter extends BaseRecyclerViewAdapter<PlayMusicAdapter.V
         mOffset = offset;
     }
 
-    void addPosition(int position) {
-        mCurrentPosition = position;
-    }
-
-    public void setItemClickListener(PlayMusicAdapter.OnItemClickListener itemClickListener) {
+    public void setItemClickListener(SearchAdapter.OnItemClickListener itemClickListener) {
         mItemClickListener = itemClickListener;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         private OnItemClickListener mItemClickListener;
-        private ItemPlayMusicFragmentBinding mBinding;
-        private ItemPlayMusicViewModel mViewModel;
+        private LayoutItemSearchBinding mBinding;
 
-        ViewHolder(ItemPlayMusicFragmentBinding binding, OnItemClickListener itemClickListener) {
+        ViewHolder(LayoutItemSearchBinding binding, OnItemClickListener itemClickListener) {
             super(binding.getRoot());
             mBinding = binding;
             mItemClickListener = itemClickListener;
         }
 
         void bind(Track track) {
-            mViewModel =
-                    new ItemPlayMusicViewModel(track, getAdapterPosition(), mItemClickListener);
-            mBinding.setViewModel(mViewModel);
+            mBinding.setViewModel(
+                    new ItemSearchViewModel(track, getAdapterPosition(), mItemClickListener));
             mBinding.executePendingBindings();
-        }
-
-        void changeColor() {
-            mViewModel.mIsSelected.set(true);
-        }
-
-        void resetColor() {
-            mViewModel.mIsSelected.set(false);
         }
     }
 

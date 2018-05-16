@@ -2,6 +2,7 @@ package com.example.along.scmusic.screen.home;
 
 import android.content.Context;
 import android.databinding.ObservableField;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ public class HomeViewModel extends BaseViewModel implements HomeAdapter.OnItemCl
     private static final int LIMIT_FIVE = 5;
     private static final int OFFSET = 0;
     private static final int VALUES_OFFSET_AFTER_REQUEST_DATA_ONCE = 10;
+    private static final int REQUEST_CODE = 111;
 
     private Context mContext;
     private TrackRepository mTrackRepository;
@@ -130,20 +132,18 @@ public class HomeViewModel extends BaseViewModel implements HomeAdapter.OnItemCl
     }
 
     private void getTracksByGenre(@Genres String genres, HomeAdapter adapter) {
-        Disposable disposable =
-                mTrackRepository.getTracksByGenre(Constant.LIMIT_TEN, genres, OFFSET)
-                        .subscribeOn(mSchedulerProvider.io())
-                        .observeOn(mSchedulerProvider.ui())
-                        .subscribe(trackList -> adapter.addData(trackList),
-                                throwable -> Toast.makeText(mContext,
-                                        throwable.getLocalizedMessage(), Toast.LENGTH_SHORT)
-                                        .show());
+        Disposable disposable = mTrackRepository.getTracksByGenre(20, genres, OFFSET)
+                .subscribeOn(mSchedulerProvider.io())
+                .observeOn(mSchedulerProvider.ui())
+                .subscribe(trackList -> adapter.addData(trackList),
+                        throwable -> Toast.makeText(mContext, throwable.getLocalizedMessage(),
+                                Toast.LENGTH_SHORT).show());
         mCompositeDisposable.add(disposable);
     }
 
     public void goToSeeMoreMusicActivity(View view, String genre) {
         Bundle bundle = new Bundle();
         bundle.putString(Constant.GENRE, genre);
-        mNavigator.startActivity(SeeMoreMusicActivity.class, bundle);
+        mNavigator.startActivityForResult(SeeMoreMusicActivity.class, bundle, REQUEST_CODE);
     }
 }

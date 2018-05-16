@@ -22,19 +22,9 @@ public class Utilities {
                 (int) ((milliseconds % (ONE_THOUSAND_MILLISECONDS * SIXTY_SECONDS * SIXTY_SECONDS))
                         % (ONE_THOUSAND_MILLISECONDS * SIXTY_SECONDS) / ONE_THOUSAND_MILLISECONDS);
 
-        if (hours > 0) {
-            finalTimerString = hours + TWO_DOT;
-        }
+        return hours > 0 ? String.format("%02d:%02d:%02d", hours, minutes, seconds)
+                : String.format("%02d:%02d", minutes, seconds);
 
-        if (seconds < TEN_SECONDS) {
-            secondsString = ZERO + seconds;
-        } else {
-            secondsString = "" + seconds;
-        }
-
-        finalTimerString = finalTimerString + minutes + TWO_DOT + secondsString;
-
-        return finalTimerString;
     }
 
     public int getProgressPercentage(long currentDuration, long totalDuration) {

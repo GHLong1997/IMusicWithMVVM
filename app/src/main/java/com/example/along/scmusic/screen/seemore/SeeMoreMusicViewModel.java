@@ -18,6 +18,7 @@ import com.example.along.scmusic.utils.navigator.Navigator;
 import com.example.along.scmusic.utils.rx.SchedulerProvider;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import java.util.List;
 
@@ -37,6 +38,7 @@ public class SeeMoreMusicViewModel extends BaseViewModel
     private EndlessRecyclerViewScrollListener mEndlessScrollListener;
     private OnOpenFragmentListener mFragmentListener;
     public ObservableField<String> mGenreObservable = new ObservableField<>();
+    public ObservableField<Boolean> mIsLoading = new ObservableField<>(false);
 
     public SeeMoreMusicViewModel(Context context, TrackRepository trackRepository,
             SchedulerProvider schedulerProvider, Navigator navigator, SeeMoreMusicAdapter adapter,
@@ -73,8 +75,15 @@ public class SeeMoreMusicViewModel extends BaseViewModel
     }
 
     private void getTracksByGenres(@Genres String genres) {
+        mIsLoading.set(true);
         Disposable disposable =
                 mTrackRepository.getTracksByGenre(Constant.LIMIT_TEN, genres, mAdapter.getOffset())
+                        .doAfterTerminate(new Action() {
+                            @Override
+                            public void run() throws Exception {
+                                mIsLoading.set(false);
+                            }
+                        })
                         .subscribeOn(mSchedulerProvider.io())
                         .observeOn(mSchedulerProvider.ui())
                         .subscribe(new Consumer<List<Track>>() {

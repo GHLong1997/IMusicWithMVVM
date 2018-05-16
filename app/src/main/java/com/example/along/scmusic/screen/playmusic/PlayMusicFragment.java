@@ -1,5 +1,6 @@
 package com.example.along.scmusic.screen.playmusic;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +15,7 @@ import com.example.along.scmusic.data.source.local.TrackLocalDataSource;
 import com.example.along.scmusic.data.source.remote.TrackRemoteDataSource;
 import com.example.along.scmusic.databinding.FragmentPlayMusicBinding;
 import com.example.along.scmusic.screen.BaseFragment;
+import com.example.along.scmusic.screen.OnDataChangedListener;
 import com.example.along.scmusic.utils.Constant;
 import com.example.along.scmusic.utils.navigator.Navigator;
 import com.example.along.scmusic.utils.rx.SchedulerProvider;
@@ -23,6 +25,7 @@ import java.util.List;
 public class PlayMusicFragment extends BaseFragment {
 
     private PlayMusicViewModel mViewModel;
+    private OnDataChangedListener<Track> mListener;
     private List<Track> mTracks = new ArrayList<>();
     private int mTrackPosition;
     private int mOffset;
@@ -34,6 +37,13 @@ public class PlayMusicFragment extends BaseFragment {
         args.putInt(Constant.OFFSET, offset);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mListener = (OnDataChangedListener<Track>) context;
+
     }
 
     @Nullable
@@ -71,6 +81,9 @@ public class PlayMusicFragment extends BaseFragment {
                         SchedulerProvider.getInstance(), getAdapter());
         mViewModel.setGenre(mTracks.get(Constant.DEFAULT_POSITION).getGenre());
         mViewModel.setTrackPosition(mTrackPosition);
+        mViewModel.setListener(mListener);
+        mViewModel.playService();
+        mViewModel.registerBroadcastReceiver();
     }
 
     private PlayMusicAdapter getAdapter() {
@@ -83,5 +96,21 @@ public class PlayMusicFragment extends BaseFragment {
 
     public void setData(@NonNull List<Track> tracks) {
         mTracks = tracks;
+    }
+
+    public void refreshData(List<Track> tracks, int trackPosition, int offset) {
+        mViewModel.refreshData(tracks, trackPosition, offset);
+    }
+
+    public void nextTrack(View view) {
+        mViewModel.onNextTrack();
+    }
+
+    public void preTrack(View view) {
+        mViewModel.onPreTrack();
+    }
+
+    public void onPlayAndPauseTrack(View view) {
+        mViewModel.onImagePlayMusicClicked(view);
     }
 }

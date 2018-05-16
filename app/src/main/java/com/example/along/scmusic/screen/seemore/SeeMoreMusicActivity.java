@@ -12,6 +12,7 @@ import com.example.along.scmusic.data.repository.TrackRepository;
 import com.example.along.scmusic.data.source.local.TrackLocalDataSource;
 import com.example.along.scmusic.data.source.remote.TrackRemoteDataSource;
 import com.example.along.scmusic.databinding.ActivitySeeMoreMusicBinding;
+import com.example.along.scmusic.screen.OnDataChangedListener;
 import com.example.along.scmusic.screen.OnOpenFragmentListener;
 import com.example.along.scmusic.screen.playmusic.PlayMusicFragment;
 import com.example.along.scmusic.utils.Constant;
@@ -19,7 +20,8 @@ import com.example.along.scmusic.utils.navigator.Navigator;
 import com.example.along.scmusic.utils.rx.SchedulerProvider;
 import java.util.List;
 
-public class SeeMoreMusicActivity extends AppCompatActivity implements OnOpenFragmentListener {
+public class SeeMoreMusicActivity extends AppCompatActivity implements OnOpenFragmentListener,
+        OnDataChangedListener {
 
     private SeeMoreMusicViewModel mViewModel;
     private FragmentManager mFragmentManager;
@@ -54,18 +56,16 @@ public class SeeMoreMusicActivity extends AppCompatActivity implements OnOpenFra
         FragmentTransaction transaction = mFragmentManager.beginTransaction();
         transaction.setCustomAnimations(R.anim.slide_in_up, R.anim.slide_in_down,
                 R.anim.slide_out_down, R.anim.slide_out_up);
-        PlayMusicFragment playMusicFragment =
-                (PlayMusicFragment) mFragmentManager.findFragmentByTag(tag);
-
-        if (playMusicFragment == null) {
+        PlayMusicFragment
             playMusicFragment = PlayMusicFragment.newInstance(position, offset);
             playMusicFragment.setData(tracks);
             transaction.replace(containerViewId, playMusicFragment, tag)
                     .addToBackStack(null)
                     .commit();
-        } else {
-            transaction.show(playMusicFragment)
-                    .commit();
-        }
+    }
+
+    @Override
+    public void onDataChanged(Object item) {
+
     }
 }

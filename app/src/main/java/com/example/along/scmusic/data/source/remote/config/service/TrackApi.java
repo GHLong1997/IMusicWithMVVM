@@ -16,4 +16,8 @@ public interface TrackApi {
     @GET("tracks?" + Constant.CLIENT_ID)
     Single<List<Track>> getTrackListByGenres(@Query("limit") int limit,
             @Query("genres") @Genres String genres, @Query("offset") int offset);
+
+    @GET("tracks?" + Constant.CLIENT_ID)
+    Single<List<Track>> searchTracks(@Query("q") String query, @Query("limit") int limit,
+            @Query("offset") int offset);
 }
